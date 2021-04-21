@@ -107,10 +107,11 @@ class Matrika:
         if self.stolpci != other.vrstice:
             return Exception("POZOR! Dimenzije matrik se ne ujemajo!")
         elif other.stolpci != 1:
-            return Exception("POZOR! Sistem enačb lahko ima samo eno rešitev!")
+            return Exception("POZOR! Sistem enačb ima lahko ima eno rešitev!")
         else:
             return __mul__(inverz_matrike(self.matrika),other.matrika)
 
 
 #funkcija za MNK
 # determinanta
+#potenciranje
