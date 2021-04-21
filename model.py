@@ -42,25 +42,6 @@ class Matrika:
                 vsota.append(vrstica)
             return Matrika(vsota)
 
-    def __sub__(self, other):
-        #prvi del podoben kot pri seštevanju, 
-        # tj. pogoji odštevanja niso mogoči
-        if  self.vrstice != self.stolpci or other.vrstice != other.stolpci:
-            raise Exception("POZOR! Matriki nista kvadratni!")
-
-        elif self.vrstice != other.vrstice or self.stolpci != other.stolpci:
-            raise Exception("POZOR! Matriki sta raličnih velikosti!")
-        #pogoji so mogoči
-        else:
-            n = self.vrstice
-            m = self.stolpci
-            razlika = []
-            vrstica = []
-            for i in range(n):
-                for j in range(m):
-                    vrstica.append(self.matrika[i][j] - other.matrika[i][j])
-                razlika.append(vrstica)
-            return Matrika(razlika)
     def sled_matrike(self):
         #funkcija, ki izračuna sled matrike
         if not self.vrstice == self.stolpci:
@@ -84,22 +65,19 @@ class Matrika:
                 transponiranka.append(vrstica)
         return transponiranka
 
-    def potencirajmo_celene_matrike(self,k): 
-    #funkcija, ki bo potencirala matriko
-    #pogoji so, da je kvadratna torej
-        if self.vrstice != self.stolpci:
-            return Exception("POZOR! Matrika ni kvadratna!")
-
-        else:
-            n = self.vrstice 
-            m = self.stolpci
-            matrikca = []
-            vrstica = []
-            for i in range(n):
-                for j in range(m):
-                    vrstica.append(self.matrika[i**int(k)][j**int(k)])
-                    matrikca.append(vrstica)
-            return matrikca
+    def mnozenje_vseh_clenov_s_k(self,k): 
+        n = self.vrstice 
+        m = self.stolpci
+        matrikca = []
+        vrstica = []
+        for i in range(n):
+            for j in range(m):
+                vrstica.append(self.matrika[i][j]*int(k))
+                matrikca.append(vrstica)
+        return matrikca
+    
+    def odstevanje_matrik(self, other):
+        return __add__(self.matrika, mnozenje_vseh_clenov_s_k(self,-1))
 
     def __mul__(self,other):
         #funkcija, za množenje matrike 
@@ -135,4 +113,4 @@ class Matrika:
 
 
 #funkcija za MNK
- 
+# determinanta
