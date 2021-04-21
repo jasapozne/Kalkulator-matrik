@@ -1,3 +1,5 @@
+import numpy as np
+
 class Matrika:
 
     def __init__(self, matrika):
@@ -115,8 +117,22 @@ class Matrika:
                             matrikca.append(self.matrika[i][k]*other.matrika[k][j])
                 return matrikca
 
+    def inverz_matrike(self):
+    # funkcija, ki izračuna inverz matrike
+        if self.stolpci != self.vrstice:
+            return Exception("POZOR! Matrika ni kvadratna!")
+        else:
+            return np.linalg.inv(np.self.matrika) 
 
-# funkcija, ki izračuna inverz matrike
-#funkcija, za množenje s vektorji
+    def sistem_linearnih_enacb(self,other):
+        #sistem linearnih enačb
+        if self.stolpci != other.vrstice:
+            return Exception("POZOR! Dimenzije matrik se ne ujemajo!")
+        elif other.stolpci != 1:
+            return Exception("POZOR! Sistem enačb lahko ima samo eno rešitev!")
+        else:
+            return __mul__(inverz_matrike(self.matrika),other.matrika)
+
+
 #funkcija za MNK
-# sistem linearnih enačb 
+ 
