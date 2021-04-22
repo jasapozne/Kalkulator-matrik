@@ -35,8 +35,8 @@ class Matrika:
             n = self.vrstice
             m = self.stolpci
             vsota = []
-            vrstica = []
             for i in range(n):
+                vrstica = []
                 for j in range(m):
                     vrstica.append(self.matrika[i][j] + other.matrika[i][j])
                 vsota.append(vrstica)
@@ -58,22 +58,22 @@ class Matrika:
         n = self.vrstica
         m = self.stolpec
         transponiranka = []
-        vrstica = []
         for i in range(n):
+            vrstica = []
             for j in range(m):
                 vrstica.append(self.matrika[j][i])
-                transponiranka.append(vrstica)
+            transponiranka.append(vrstica)
         return transponiranka
 
     def mnozenje_vseh_clenov_s_k(self,k): 
         n = self.vrstice 
         m = self.stolpci
         matrikca = []
-        vrstica = []
         for i in range(n):
+            vrstica = []
             for j in range(m):
                 vrstica.append(self.matrika[i][j]*int(k))
-                matrikca.append(vrstica)
+            matrikca.append(vrstica)
         return matrikca
     
     def odstevanje_matrik(self, other):
@@ -84,11 +84,11 @@ class Matrika:
         n = self.vrstice
         m = self.stolpci
         matrikca = []
-        vrstica = []
         for i in range(n):
+            vrstica = []
             for j in range(m):
-                vrstica[i][j] = 0
-                matrikca.append(vrstica)
+                vrstica.append(self.matrika[i][j] *0)
+            matrikca.append(vrstica)
         return matrikca
     
     def nicelni_seznam(self):
@@ -108,12 +108,11 @@ class Matrika:
                 n = self.vrstice
                 m = other.stolpci
                 l = other.vrstice
-                matrikca = []
-                #POTREBNO BO ŠE DEFINIRATI MATRIKO, Z DIM. m×l LE-TA PA BO IMELA POVSOD SAME NIČLE
+                matrikca = matrika_s_samimi_niclami(self.matrika)
                 for i in range(n):
                     for j in range(m):
                         for k in range(l):
-                            matrikca.append(self.matrika[i][k]*other.matrika[k][j])
+                            matrikca[i][j] += self.matrika[i][k]*other.matrika[k][j]
                 return matrikca
 
     def inverz_matrike(self):
@@ -141,7 +140,7 @@ class Matrika:
             for j in range(m):
                 for k in range(len(sez)):
                     if j==k:
-                        sez[k] += self.matrika[i][j]
+                        sez[k] += (self.matrika[i][j]) ** 2
                     else:
                         pass
         return sez
@@ -160,13 +159,12 @@ class Matrika:
         m = self.stolpci
         sez = dolzine_sestete(self.matrika)
         matrikca = []
-        vrstica = []
         for i in range(n):
+            vrstica = []
             for j in range(m):
                 for k in range(len(sez)):
-                    if j==k:
-                        vrstica.append(self.matrika[i][j]/sez[k])
-                        matrikca.append(vrstica)
+                    vrstica.append(self.matrika[i][j]/sez[k])
+                matrikca.append(vrstica)
         return matrikca                        
 
 
