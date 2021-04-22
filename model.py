@@ -79,6 +79,27 @@ class Matrika:
     def odstevanje_matrik(self, other):
         return __add__(self.matrika, mnozenje_vseh_clenov_s_k(self,-1))
 
+    def matrika_s_samimi_niclami(self):
+        #pomožna funkcija za pomoč pri množenju
+        n = self.vrstice
+        m = self.stolpci
+        matrikca = []
+        vrstica = []
+        for i in range(n):
+            for j in range(m):
+                vrstica[i][j] = 0
+                matrikca.append(vrstica)
+        return matrikca
+    
+    def nicelni_seznam(self):
+        #pomožna funkcija za normiranje
+        m = self.stolpci
+        sez = []
+        for j in range(m):
+            sez[j]=0
+        return sez
+
+    
     def __mul__(self,other):
         #funkcija, za množenje matrike 
             if self.stolpci != other.vrstice:
@@ -111,7 +132,45 @@ class Matrika:
         else:
             return __mul__(inverz_matrike(self.matrika),other.matrika)
 
+    def dolzina_vektorjev(self):
+        #pomožna funkcija
+        n = self.vrstice
+        m = self.stolpci
+        sez = nicelni_seznam(self.matrika)
+        for i in range(n):
+            for j in range(m):
+                for k in range(len(sez)):
+                    if j==k:
+                        sez[k] += self.matrika[i][j]
+                    else:
+                        pass
+        return sez
+    
+    def dolzine_sestete(self):
+        #pomožna funkcija 
+        sez = dolzina_vektorjev(self.matrika)
+        for h in range(len(sez)):
+            sez[h]=sez[h] ** (1/2)
+        return sez
+    
+    def normiranje(self):
+        #podobni problemi kot pri množenju, tj. rezultat je pravilen a jih vrne več 
+        #npr. če bo 3×3 matrika bo vrila 
+        n = self.vrstice
+        m = self.stolpci
+        sez = dolzine_sestete(self.matrika)
+        matrikca = []
+        vrstica = []
+        for i in range(n):
+            for j in range(m):
+                for k in range(len(sez)):
+                    if j==k:
+                        vrstica.append(self.matrika[i][j]/sez[k])
+                        matrikca.append(vrstica)
+        return matrikca                        
 
-#funkcija za MNK
+
+
 # determinanta
 #potenciranje
+#MGS
