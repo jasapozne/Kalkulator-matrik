@@ -65,31 +65,23 @@ class Matrika:
             transponiranka.append(vrstica)
         return transponiranka
 
-    def mnozenje_vseh_clenov_s_k(self,k): 
+    def mnozi_k_poteciraj_l(self,k,l): 
         n = self.vrstice 
         m = self.stolpci
         matrikca = []
         for i in range(n):
             vrstica = []
             for j in range(m):
-                vrstica.append(self.matrika[i][j]*int(k))
+                vrstica.append((self.matrika[i][j] ** int(l)) * int(k))
             matrikca.append(vrstica)
         return matrikca
     
     def odstevanje_matrik(self, other):
-        return __add__(self.matrika, mnozenje_vseh_clenov_s_k(self,-1))
+        return __add__(self.matrika, mnozi_k_poteciraj_l(self,-1,1))
 
     def matrika_s_samimi_niclami(self):
         #pomožna funkcija za pomoč pri množenju
-        n = self.vrstice
-        m = self.stolpci
-        matrikca = []
-        for i in range(n):
-            vrstica = []
-            for j in range(m):
-                vrstica.append(self.matrika[i][j] *0)
-            matrikca.append(vrstica)
-        return matrikca
+        return mnozi_k_poteciraj_l(self.matrika,0,1)
     
     def nicelni_seznam(self):
         #pomožna funkcija za normiranje
@@ -197,5 +189,24 @@ class Matrika:
                 poddeterminanta = matrikca.izracun_determinante()
                 determinanta += predznak *matrikca[0][stolpci] * poddeterminanta 
             return determinanta
-#potenciranje
+    
+    def potenciranje_matrike(self,k):
+        #potenciranje
+        #pogoji
+        if self.vrstice != self.stolpci:
+            raise Exception("POZOR! Matrika ni kvadratna!")
+        else:
+            if k == 0:
+                return mnozi_k_poteciraj_l(self.matrika,1,0)
+            elif k == 1:
+                return self.matrika
+            elif k == 2:
+                return __mul__(self.matrika,self.matrika)
+            elif k < 0:
+                raise Exception("POZOR! K mora biti večji od 0!")
+            else:
+                return __add__(__mul__(self.matrika,self.matrika),potenciranje_matrike(self.matrika,k-1))
+
+
+
 #MGS
