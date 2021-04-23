@@ -103,7 +103,7 @@ class Matrika:
     def __mul__(self,other):
         #funkcija, za množenje matrike 
             if self.stolpci != other.vrstice:
-                return Exception("POZOR! Dimenzije matrik se ne ujemajo!")
+                raise Exception("POZOR! Dimenzije matrik se ne ujemajo!")
             else:
                 n = self.vrstice
                 m = other.stolpci
@@ -118,16 +118,16 @@ class Matrika:
     def inverz_matrike(self):
     # funkcija, ki izračuna inverz matrike
         if self.stolpci != self.vrstice:
-            return Exception("POZOR! Matrika ni kvadratna!")
+            raise Exception("POZOR! Matrika ni kvadratna!")
         else:
             return np.linalg.inv(np.self.matrika) 
 
     def sistem_linearnih_enacb(self,other):
         #sistem linearnih enačb
         if self.stolpci != other.vrstice:
-            return Exception("POZOR! Dimenzije matrik se ne ujemajo!")
+            raise Exception("POZOR! Dimenzije matrik se ne ujemajo!")
         elif other.stolpci != 1:
-            return Exception("POZOR! Sistem enačb ima lahko ima eno rešitev!")
+            raise Exception("POZOR! Sistem enačb ima lahko ima eno rešitev!")
         else:
             return __mul__(inverz_matrike(self.matrika),other.matrika)
 
@@ -152,23 +152,50 @@ class Matrika:
             sez[h]=sez[h] ** (1/2)
         return sez
     
+    def seznam_veckratnih_dolzin(self):
+        #pomožna funkcija
+        #funkcija vrne prejšni seznam kot matriko z elementi večkrat ponovljenimi
+        sez = dolzine_sestete(self.matrika)
+        ponavljaj = self.vrstice
+        sez_kot_matrika = [sez]*self.vrstice
+        return sez_kot_matrika
+
     def normiranje(self):
-        #podobni problemi kot pri množenju, tj. rezultat je pravilen a jih vrne več 
-        #npr. če bo 3×3 matrika bo vrila 
         n = self.vrstice
         m = self.stolpci
-        sez = dolzine_sestete(self.matrika)
-        matrikca = []
+        sez = seznam_veckratnih_dolzin(self.matrika)
+        matrikca = matrika_s_samimi_niclami(self.matrika)
         for i in range(n):
-            vrstica = []
             for j in range(m):
-                for k in range(len(sez)):
-                    vrstica.append(self.matrika[i][j]/sez[k])
-                matrikca.append(vrstica)
-        return matrikca                        
+                matrikca[i][j] += self.matrika[i][j] * 1/sez[i][j]
+        return matrikca                   
 
-
-
-# determinanta
+    def izracun_determinante(self):
+        # determinanta
+        #matrika mora biti
+        if self.vrstice != self.stolpci:
+            raise Exception("POZOR! Matrika ni kvadratna!")
+        #če bo 1×1
+        elif self.stolpci == 1: #and self.vrstica==1 
+            return self.matrika[0][0]
+        #če bo matrika 2×2
+        elif self.stolpci == 2:
+            return self.matrika[0][0] * self.matrika[1][1] - self.matrika[0][1] * self.matrika[1][0]
+        #sicer
+        else:
+            A = self.matrika
+            determinanta = 0
+            indeksi = list(range(self.matrika.vrstice))
+            for stolpci in indeksi:
+                matrikca = self.matrika 
+                matrikca = matrikca[1:]
+                visina = len(matrikca)
+                for i in range(visina): 
+                    matrikca[i] = matrikca[i][0:stolpci] + matrikca[i][stolpci+1:] 
+                predznak = (-1) ** (stolpci % 2)
+                matrikca = Matrika(matrikca)
+                poddeterminanta = matrikca.izracun_determinante()
+                determinanta += predznak *matrikca[0][stolpci] * poddeterminanta 
+            return determinanta
 #potenciranje
 #MGS
