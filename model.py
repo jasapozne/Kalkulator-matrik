@@ -207,6 +207,25 @@ class Matrika:
             else:
                 return __add__(__mul__(self.matrika,self.matrika),potenciranje_matrike(self.matrika,k-1))
 
+    @staticmethod
+    def identiteta(n):
+        matrikca = []
+        for i in range(n):
+            vrstica = []
+            for j in range(n):
+                if i == j:
+                    vrstica.append(1)
+                else:
+                    vrstica.append(0)
+            matrikca.append(vrstica)
+        return matrikca
 
-
-#MGS
+    def obrnljivost_matrike(self):
+        #pogoji
+        if self.vrstice != self.stolpci:
+            raise Exception("POZOR! Matrika ni kvadratna!")
+        else:
+            if __mul__(self.matrika,inverz_matrike(self.matrika)) == __mul__(inverz_matrike(self.matrika),self.matrika) and  __mul__(self.matrika,inverz_matrike(self.matrika)) == identiteta(self.vrstice):
+                return True
+            else:
+                return False
