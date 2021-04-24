@@ -21,7 +21,10 @@ class Matrika:
 
     def __repr__(self):
         return "Matrika({0})".format(self.matrika)
-
+    
+    def __getitem__(self, indeks):
+        return self.matrika[indeks]
+   
     def __add__(self, other):
         #funkcija bo seštela dve matriki
         #najprej naj bo kaj se zgodi, če pogoji seštevanja niso "mogoči"
@@ -51,7 +54,7 @@ class Matrika:
             sled = 0
             for i in range(n):
                 sled += self.matrika[i][i]
-            return sled
+            return Matrika(sled)
 
     def transponiraj_matriko(self):
     # fukcija, ki bo transponirala matriko
@@ -63,7 +66,7 @@ class Matrika:
             for j in range(m):
                 vrstica.append(self.matrika[j][i])
             transponiranka.append(vrstica)
-        return transponiranka
+        return Matrika(transponiranka)
 
     def mnozi_k_poteciraj_l(self,k,l): 
         n = self.vrstice 
@@ -74,10 +77,10 @@ class Matrika:
             for j in range(m):
                 vrstica.append((self.matrika[i][j] ** int(l)) * int(k))
             matrikca.append(vrstica)
-        return matrikca
+        return Matrika(matrikca)
     
     def odstevanje_matrik(self, other):
-        return __add__(self.matrika, mnozi_k_poteciraj_l(self,-1,1))
+        return Matrika(__add__(self.matrika, mnozi_k_poteciraj_l(self,-1,1)))
 
     def matrika_s_samimi_niclami(self):
         #pomožna funkcija za pomoč pri množenju
@@ -105,14 +108,14 @@ class Matrika:
                     for j in range(m):
                         for k in range(l):
                             matrikca[i][j] += self.matrika[i][k]*other.matrika[k][j]
-                return matrikca
+                return Matrika(matrikca)
 
     def inverz_matrike(self):
     # funkcija, ki izračuna inverz matrike
         if self.stolpci != self.vrstice:
             raise Exception("POZOR! Matrika ni kvadratna!")
         else:
-            return np.linalg.inv(np.self.matrika) 
+            return Matrika(np.linalg.inv(np.self.matrika)) 
 
     def sistem_linearnih_enacb(self,other):
         #sistem linearnih enačb
@@ -121,7 +124,7 @@ class Matrika:
         elif other.stolpci != 1:
             raise Exception("POZOR! Sistem enačb ima lahko ima eno rešitev!")
         else:
-            return __mul__(inverz_matrike(self.matrika),other.matrika)
+            return Matrika(__mul__(inverz_matrike(self.matrika),other.matrika))
 
     def dolzina_vektorjev(self):
         #pomožna funkcija
@@ -160,7 +163,7 @@ class Matrika:
         for i in range(n):
             for j in range(m):
                 matrikca[i][j] += self.matrika[i][j] * 1/sez[i][j]
-        return matrikca                   
+        return Matrika(matrikca)                   
 
     def izracun_determinante(self):
         # determinanta
@@ -205,7 +208,7 @@ class Matrika:
             elif k < 0:
                 raise Exception("POZOR! K mora biti večji od 0!")
             else:
-                return __add__(__mul__(self.matrika,self.matrika),potenciranje_matrike(self.matrika,k-1))
+                return Matrika(__add__(__mul__(self.matrika,self.matrika),potenciranje_matrike(self.matrika,k-1)))
 
     @staticmethod
     def identiteta(n):
