@@ -79,8 +79,25 @@ class Matrika:
             matrikca.append(vrstica)
         return Matrika(matrikca)
     
-    def odstevanje_matrik(self, other):
-        return Matrika(__add__(self.matrika, mnozi_k_poteciraj_l(self,-1,1)))
+    def __sub__(self, other):
+        #prvi del podoben kot pri seštevanju, 
+        # tj. pogoji odštevanja niso mogoči
+        if  self.vrstice != self.stolpci or other.vrstice != other.stolpci:
+            raise Exception("POZOR! Matriki nista kvadratni!")
+
+        elif self.vrstice != other.vrstice or self.stolpci != other.stolpci:
+            raise Exception("POZOR! Matriki sta raličnih velikosti!")
+        #pogoji so mogoči
+        else:
+            m = self.vrstice
+            n = self.stolpci
+            razlika = []
+            for i in range(m):
+                vrstica = []
+                for j in range(n):
+                    vrstica.append(self.matrika[i][j] - other.matrika[i][j])
+                razlika.append(vrstica)
+            return Matrika(razlika)
 
     def matrika_s_samimi_niclami(self):
         #pomožna funkcija za pomoč pri množenju
