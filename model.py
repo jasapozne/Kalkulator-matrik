@@ -24,7 +24,7 @@ class Matrika:
     
     def __getitem__(self, indeks):
         return self.matrika[indeks]
-   
+        
     def __add__(self, other):
         #funkcija bo seštela dve matriki
         #najprej naj bo kaj se zgodi, če pogoji seštevanja niso "mogoči"
@@ -54,12 +54,12 @@ class Matrika:
             sled = 0
             for i in range(n):
                 sled += self.matrika[i][i]
-            return Matrika(sled)
+            return sled
 
     def transponiraj_matriko(self):
     # fukcija, ki bo transponirala matriko
-        n = self.vrstica
-        m = self.stolpec
+        n = self.vrstice
+        m = self.stolpci
         transponiranka = []
         for i in range(n):
             vrstica = []
