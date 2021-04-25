@@ -1,0 +1,18 @@
+<!-- Za vpisovanje dveh matrik -->
+
+% rebase("domaca.html")
+
+<form action={{ operacija }} method="POST">
+  <div class="form-group">
+    <p><label for="matrika1">Vpišite prvo matriko:</label></p>
+    <textarea class="form-control" id="matrika1" rows="5" name="matrika1" ></textarea>
+
+    <div align="center">
+      <h1>{{ operator }}</h1>
+    </div>
+
+    <p><label for="matrika2">Vpišite drugo matriko:</label></p>
+    <textarea class="form-control" id="matrika2" rows="5" name="matrika2"></textarea>
+    <input type="submit" value={{ operiraj }}!>
+  </div>
+</form>
