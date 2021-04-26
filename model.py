@@ -100,27 +100,21 @@ class Matrika:
             return Matrika(razlika)
 
     def matrika_s_samimi_niclami(self):
-        #pomožna funkcija za pomoč pri množenju
-        return mnozi_k_poteciraj_l(self.matrika,0,1)
+        return Matrika([[0 for i in range(self.stolpci)] for j in range(self.vrstice)])
     
     def nicelni_seznam(self):
-        #pomožna funkcija za normiranje
-        m = self.stolpci
-        sez = []
-        for j in range(m):
-            sez[j]=0
-        return sez
-
+        return [0 for i in range(self.stolpci)]
     
     def __mul__(self,other):
         #funkcija, za množenje matrike 
             if self.stolpci != other.vrstice:
                 raise Exception("POZOR! Dimenzije matrik se ne ujemajo!")
             else:
+                matrikca = [[0 for i in range(self.stolpci)] for j in range(other.vrstice)]
                 n = self.vrstice
                 m = other.stolpci
                 l = other.vrstice
-                matrikca = matrika_s_samimi_niclami(self.matrika)
+                #matrikca = matrika_s_samimi_niclami(self.matrika)
                 for i in range(n):
                     for j in range(m):
                         for k in range(l):
@@ -141,13 +135,12 @@ class Matrika:
         elif other.stolpci != 1:
             raise Exception("POZOR! Sistem enačb ima lahko ima eno rešitev!")
         else:
-            return Matrika(__mul__(inverz_matrike(self.matrika),other.matrika))
+            return Matrika(inverz_matrike(self.matrika).__mul__(other.matrika))
 
-    def dolzina_vektorjev(self):
-        #pomožna funkcija
+    def norma(self):
+        sez=[0 for i in range(self.stolpci)]
         n = self.vrstice
         m = self.stolpci
-        sez = nicelni_seznam(self.matrika)
         for i in range(n):
             for j in range(m):
                 for k in range(len(sez)):
@@ -155,31 +148,16 @@ class Matrika:
                         sez[k] += (self.matrika[i][j]) ** 2
                     else:
                         pass
-        return sez
-    
-    def dolzine_sestete(self):
-        #pomožna funkcija 
-        sez = dolzina_vektorjev(self.matrika)
+
         for h in range(len(sez)):
             sez[h]=sez[h] ** (1/2)
-        return sez
-    
-    def seznam_veckratnih_dolzin(self):
-        #pomožna funkcija
-        #funkcija vrne prejšni seznam kot matriko z elementi večkrat ponovljenimi
-        sez = dolzine_sestete(self.matrika)
+
         ponavljaj = self.vrstice
         sez_kot_matrika = [sez]*self.vrstice
-        return sez_kot_matrika
-
-    def normiranje(self):
-        n = self.vrstice
-        m = self.stolpci
-        sez = seznam_veckratnih_dolzin(self.matrika)
-        matrikca = matrika_s_samimi_niclami(self.matrika)
+        matrikca = [[0 for i in range(self.stolpci)] for j in range(self.vrstice)]
         for i in range(n):
             for j in range(m):
-                matrikca[i][j] += self.matrika[i][j] * 1/sez[i][j]
+                matrikca[i][j] += self.matrika[i][j] * 1/sez_kot_matrika[i][j]
         return Matrika(matrikca)                   
 
     def izracun_determinante(self):
@@ -221,11 +199,11 @@ class Matrika:
             elif k == 1:
                 return self.matrika
             elif k == 2:
-                return __mul__(self.matrika,self.matrika)
-            elif k < 0:
+                return self.matrika.__mul__(self.matrika)
+            elif float(k) < 0:
                 raise Exception("POZOR! K mora biti večji od 0!")
             else:
-                return Matrika(__add__(__mul__(self.matrika,self.matrika),potenciranje_matrike(self.matrika,k-1)))
+                return Matrika((self.matrika.__mul__(self.matrika).__add__(potenciranje_matrike(self.matrika,k-1))))
 
     @staticmethod
     def identiteta(n):
