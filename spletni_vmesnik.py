@@ -1,5 +1,6 @@
 import bottle
 from model import Matrika
+import numpy as np
 
 
 
@@ -59,15 +60,15 @@ def mnozi():
 
 @bottle.get("/sistem_linearnih_enacb")
 def sistem_linearnih_enacb():
-    return bottle.template("operacijem.html", operacija="/sistemi", operator="*",operiraj="reši")
+    return bottle.template("lin_sis.html", objekt="vektor", operacija="/sistemi",izracunaj="sistemi")
 
 @bottle.post("/sistemi")
 def sistemi():
-    matrika1 = bottle.request.forms["matrika1"]
-    matrika2 = bottle.request.forms["matrika2"]
-    matrikca1 = izpisana_matrika(matrika1)
-    matrikca2 = izpisana_matrika(matrika2)
-    resitev_lin_sistema = sistem_linearnih_enacb(matrikca1,matrikca2)
+    matrika = bottle.request.forms["matrika"]
+    vektor = bottle.request.forms["vektor"]
+    matrikca = izpisana_matrika(matrika)
+    vektor = izpisana_matrika(vektor)
+    resitev_lin_sistema = matrikca.sistem_linearnih_enacb(vektor)
     return bottle.template("resitev.html", besedilo="Sistem", rezultat=resitev_lin_sistema)
 
 ################################################################################
@@ -95,14 +96,15 @@ def inverziraj():
 
 @bottle.get("/potenciranje")
 def potenciranje():
-    return bottle.template("enojnematrike.html", operacija="/potenciraj", izracunaj="potenciraj")
+    return bottle.template("potenca.html",objekt="potenca", operacija="/potenciraj", izracunaj="potenciraj")
 
 @bottle.post("/potenciraj")
 def potenciraj():
     matrika = bottle.request.forms["matrika"]
     matrikca = izpisana_matrika(matrika)
-    potenca = matrikca.potenciranje_matrike()
-    return bottle.template("resitev.html", besedilo="Potenciraj:", rezultat=potenca)
+    potenca = bottle.request.forms["potenca"]
+    rezultat = matrikca.potenciranje_matrike(potenca)
+    return bottle.template("resitev.html", besedilo="Potenciraj:", rezultat=rezultat)
 
 @bottle.get("/normiranje")
 def normiranje():
@@ -112,7 +114,7 @@ def normiranje():
 def normiraj():
     matrika = bottle.request.forms["matrika"]
     matrikca = izpisana_matrika(matrika)
-    norm = matrikca.normiranje()
+    norm = matrikca.norma()
     return bottle.template("resitev.html", besedilo="Norma:", rezultat=norm)
 
 @bottle.get("/slede")
