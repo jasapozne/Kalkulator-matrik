@@ -1,0 +1,13 @@
+<!-- obj. matr. -->
+
+% rebase("domaca.html")
+
+<form action={{ operacija }} method="POST">
+  <div class="form-group">
+    <p><label for="matrika">Vpiši matriko:</label></p>
+    <textarea class="form-control" id="matrika" rows="10" name="matrika" placeholder="matrika"></textarea>
+    <p><label for="potenca">Vpiši {{ objekt }}:</label></p>
+    <textarea class="form-control" id="obj" rows="1" name="potenca"></textarea>
+    <input type="submit" value={{ izracunaj }}!>
+  </div>
+</form>
