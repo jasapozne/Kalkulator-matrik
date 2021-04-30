@@ -13,6 +13,16 @@ def izpisana_matrika(matrika):
         matrikca.append(vrstica)
     return Matrika(matrikca)
 
+def inverz(matrika):
+# funkcija, ki izračuna inverz matrike
+    n = len(matrika)
+    m = len(matrika[0])
+    if n != m:
+        raise Exception("POZOR! Matrika ni kvadratna!")
+    else:
+        return np.linalg.inv(np.matrika)
+
+
 
 @bottle.get("/")
 def domaca_stran():
@@ -67,8 +77,9 @@ def sistemi():
     matrika = bottle.request.forms["matrika"]
     vektor = bottle.request.forms["vektor"]
     matrikca = izpisana_matrika(matrika)
-    vektor = izpisana_matrika(vektor)
-    resitev_lin_sistema = matrikca.sistem_linearnih_enacb(vektor)
+    vektor1 = izpisana_matrika(vektor)
+    mat = matrikca.inverz_matrike()
+    resitev_lin_sistema = mat.__mul__(vektor1)
     return bottle.template("resitev.html", besedilo="Sistem", rezultat=resitev_lin_sistema)
 
 ################################################################################
@@ -147,7 +158,8 @@ def obrnljivost_matrike():
 def obrni():
     matrika = bottle.request.forms["matrika"]
     matrikca = izpisana_matrika(matrika)
-    obrnljivo = matrikca.obrnljivost_matrike
-    return bottle.template("resitev.html", besedilo="Obrnljivost:", rezultat= obrnljivo)
+    mat = matrikca.inverz_matrike()
+    obrnljivo = mat.obrnljivost_matrike()
+    return bottle.template("obrnljivost.html", besedilo="Obrnljivost:", rezultat= obrnljivo)
 
 bottle.run(reloader=True, debug=True)
