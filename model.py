@@ -126,7 +126,7 @@ class Matrika:
         if self.stolpci != self.vrstice:
             raise Exception("POZOR! Matrika ni kvadratna!")
         else:
-            return Matrika(np.linalg.inv(np.self.matrika)) 
+            return Matrika(np.linalg.inv(np.array(self.matrika))) 
 
     def sistem_linearnih_enacb(self,other):
         #sistem linearnih enačb
@@ -135,7 +135,7 @@ class Matrika:
         elif other.stolpci != 1:
             raise Exception("POZOR! Sistem enačb ima lahko ima eno rešitev!")
         else:
-            return Matrika(inverz_matrike(self.matrika).__mul__(other.matrika))
+            return Matrika(self.matrika.__mul__(other.matrika))
 
     def norma(self):
         sez=[0 for i in range(self.stolpci)]
@@ -188,6 +188,7 @@ class Matrika:
                 determinanta += predznak *matrikca[0][stolpci] * poddeterminanta 
             return determinanta
     
+
     def potenciranje_matrike(self,k):
         #potenciranje
         #pogoji
@@ -203,7 +204,7 @@ class Matrika:
             elif float(k) < 0:
                 raise Exception("POZOR! K mora biti večji od 0!")
             else:
-                return Matrika((self.matrika.__mul__(self.matrika).__add__(potenciranje_matrike(self.matrika,k-1))))
+                return Matrika(((self.matrika).__mul__(self.matrika)).__add__(potenciranje_matrike(self.matrika,k-2)))
 
     @staticmethod
     def identiteta(n):
@@ -223,7 +224,7 @@ class Matrika:
         if self.vrstice != self.stolpci:
             raise Exception("POZOR! Matrika ni kvadratna!")
         else:
-            if __mul__(self.matrika,inverz_matrike(self.matrika)) == __mul__(inverz_matrike(self.matrika),self.matrika) and  __mul__(self.matrika,inverz_matrike(self.matrika)) == identiteta(self.vrstice):
+            if self.matrika.__mul__(inverz_matrike(self.matrika)) == (inverz_matrike(self.matrika)).__mul__(self.matrika) and  self.matrika.__mul__(inverz_matrike(self.matrika)) == identiteta(self.vrstice):
                 return True
             else:
                 return False
