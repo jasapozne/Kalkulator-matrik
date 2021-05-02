@@ -1,37 +1,36 @@
 import numpy as np
 
-class Matrika:
 
+class Matrika:
     def __init__(self, matrika):
         self.matrika = matrika
-        self.stolpci = len(matrika[0]) #j
-        self.vrstice = len(matrika) #i
-        
-    
+        self.stolpci = len(matrika[0])  # j
+        self.vrstice = len(matrika)  # i
+
     def __str__(self):
         matrikca = ""
         for vrstica in self.matrika:
-            matrikca += str(vrstica) + '\n'
+            matrikca += str(vrstica) + "\n"
         return matrikca
-    
+
     def __eq__(self, other):
         return self.matrika == other.matrika
 
     def __repr__(self):
         return "Matrika({0})".format(self.matrika)
-    
+
     def __getitem__(self, indeks):
         return self.matrika[indeks]
-        
+
     def __add__(self, other):
-        #funkcija bo seštela dve matriki
-        #najprej naj bo kaj se zgodi, če pogoji seštevanja niso "mogoči"
-        if  self.vrstice != self.stolpci or other.vrstice != other.stolpci:
+        # funkcija bo seštela dve matriki
+        # najprej naj bo kaj se zgodi, če pogoji seštevanja niso "mogoči"
+        if self.vrstice != self.stolpci or other.vrstice != other.stolpci:
             raise Exception("POZOR! Matriki nista kvadratni!")
 
         elif self.vrstice != other.vrstice or self.stolpci != other.stolpci:
             raise Exception("POZOR! Matriki sta raličnih velikosti!")
-        #če pogoji seštevanja so "mogoči"
+        # če pogoji seštevanja so "mogoči"
         else:
             n = self.vrstice
             m = self.stolpci
@@ -44,7 +43,7 @@ class Matrika:
             return Matrika(vsota)
 
     def sled_matrike(self):
-        #funkcija, ki izračuna sled matrike
+        # funkcija, ki izračuna sled matrike
         if not self.vrstice == self.stolpci:
             raise Exception("POZOR! Matrika ni kvadratna!")
         else:
@@ -55,7 +54,7 @@ class Matrika:
             return sled
 
     def transponiraj_matriko(self):
-    # fukcija, ki bo transponirala matriko
+        # fukcija, ki bo transponirala matriko
         n = self.vrstice
         m = self.stolpci
         transponiranka = []
@@ -66,8 +65,8 @@ class Matrika:
             transponiranka.append(vrstica)
         return Matrika(transponiranka)
 
-    def mnozi_k_poteciraj_l(self,k,l): 
-        n = self.vrstice 
+    def mnozi_k_poteciraj_l(self, k, l):
+        n = self.vrstice
         m = self.stolpci
         matrikca = []
         for i in range(n):
@@ -76,16 +75,16 @@ class Matrika:
                 vrstica.append((self.matrika[i][j] ** int(l)) * int(k))
             matrikca.append(vrstica)
         return Matrika(matrikca)
-    
+
     def __sub__(self, other):
-        #prvi del podoben kot pri seštevanju, 
+        # prvi del podoben kot pri seštevanju,
         # tj. pogoji odštevanja niso mogoči
-        if  self.vrstice != self.stolpci or other.vrstice != other.stolpci:
+        if self.vrstice != self.stolpci or other.vrstice != other.stolpci:
             raise Exception("POZOR! Matriki nista kvadratni!")
 
         elif self.vrstice != other.vrstice or self.stolpci != other.stolpci:
             raise Exception("POZOR! Matriki sta raličnih velikosti!")
-        #pogoji so mogoči
+        # pogoji so mogoči
         else:
             m = self.vrstice
             n = self.stolpci
@@ -99,12 +98,12 @@ class Matrika:
 
     def matrika_s_samimi_niclami(self):
         return Matrika([[0 for i in range(self.stolpci)] for j in range(self.vrstice)])
-    
+
     def nicelni_seznam(self):
         return [0 for i in range(self.stolpci)]
-    
-    def __mul__(self,other):
-        #funkcija, za množenje matrike 
+
+    def __mul__(self, other):
+        # funkcija, za množenje matrike
         if self.stolpci != other.vrstice:
             raise Exception("POZOR! Dimenzije matrik se ne ujemajo!")
         else:
@@ -115,24 +114,24 @@ class Matrika:
             for i in range(n):
                 for j in range(m):
                     for k in range(l):
-                        matrikca[i][j] += self.matrika[i][k]*other.matrika[k][j]
+                        matrikca[i][j] += self.matrika[i][k] * other.matrika[k][j]
             return Matrika(matrikca)
 
     def inverz_matrike(self):
-    # funkcija, ki izračuna inverz matrike
+        # funkcija, ki izračuna inverz matrike
         if self.stolpci != self.vrstice:
             raise Exception("POZOR! Matrika ni kvadratna!")
         else:
-            return Matrika(np.linalg.inv(np.array(self.matrika))) 
+            return Matrika(np.linalg.inv(np.array(self.matrika)))
 
     def __len__(self):
         return len(self.matrika)
-    
-    def __round__(self,n):
-        return round(self.matrika,0)
 
-    def sistem_linearnih_enacb(self,vektor):
-        #sistem linearnih enačb
+    def __round__(self, n):
+        return round(self.matrika, 0)
+
+    def sistem_linearnih_enacb(self, vektor):
+        # sistem linearnih enačb
         if self.stolpci != len(vektor):
             raise Exception("POZOR! Dimenzije matrik se ne ujemajo!")
         elif len(vektor[0]) != 1:
@@ -142,55 +141,60 @@ class Matrika:
             sez = self.nicelni_seznam()
             sez_max = []
             for i in range(len(sez)):
-                sez_max.append(max(mat[i], key = abs)) #seznam absolutno največjih elementov po vrsticah
+                sez_max.append(
+                    max(mat[i], key=abs)
+                )  # seznam absolutno največjih elementov po vrsticah
                 sez[i] += round(sez_max[i])
             return sez
 
     def dolzina_vektorjev(self):
-        #pomožna funkcija, sešteje kvadrate elementov vektorja pa stolpcih
+        # pomožna funkcija, sešteje kvadrate elementov vektorja pa stolpcih
         n = self.vrstice
         m = self.stolpci
         sez = self.nicelni_seznam()
         for i in range(n):
             for j in range(m):
                 for k in range(len(sez)):
-                    if j==k:
+                    if j == k:
                         sez[k] += (self.matrika[i][j]) ** 2
                     else:
                         pass
         return sez
-    
+
     def dolzine_sestete(self):
-        #pomožna funkcija, koreni dolžine
+        # pomožna funkcija, koreni dolžine
         sez = self.dolzina_vektorjev()
         for h in range(len(sez)):
-            sez[h]=sez[h] ** (1/2)
+            sez[h] = sez[h] ** (1 / 2)
         return sez
 
     def norma(self):
-        #funkcija, ki normira vektorje v matriki
+        # funkcija, ki normira vektorje v matriki
         sez = self.dolzine_sestete()
         n = self.vrstice
         m = self.stolpci
-        sez_kot_matrika = [sez]*self.vrstice
+        sez_kot_matrika = [sez] * self.vrstice
         matrikca = self.matrika_s_samimi_niclami()
         for i in range(n):
             for j in range(m):
-                matrikca[i][j] += self.matrika[i][j] * 1/sez_kot_matrika[i][j]
-        return Matrika(matrikca)                   
+                matrikca[i][j] += self.matrika[i][j] * 1 / sez_kot_matrika[i][j]
+        return Matrika(matrikca)
 
     def izracun_determinante(self):
-        #funkcija, ki izračuna determinanto
-        #matrika mora biti kvadratna
+        # funkcija, ki izračuna determinanto
+        # matrika mora biti kvadratna
         if self.vrstice != self.stolpci:
             raise Exception("POZOR! Matrika ni kvadratna!")
-        #če bo 1×1
-        elif self.stolpci == 1: #and self.vrstica==1 
+        # če bo 1×1
+        elif self.stolpci == 1:  # and self.vrstica==1
             return self.matrika[0][0]
-        #če bo matrika 2×2
+        # če bo matrika 2×2
         elif self.stolpci == 2:
-            return self.matrika[0][0] * self.matrika[1][1] - self.matrika[0][1] * self.matrika[1][0]
-        #sicer
+            return (
+                self.matrika[0][0] * self.matrika[1][1]
+                - self.matrika[0][1] * self.matrika[1][0]
+            )
+        # sicer
         else:
             A = self.matrika
             determinanta = 0
@@ -199,23 +203,22 @@ class Matrika:
                 matrikca = A
                 matrikca = matrikca[1:]
                 visina = len(matrikca)
-                for i in range(visina): 
-                    matrikca[i] = matrikca[i][0:stolpci] + matrikca[i][stolpci+1:] 
+                for i in range(visina):
+                    matrikca[i] = matrikca[i][0:stolpci] + matrikca[i][stolpci + 1 :]
                 predznak = (-1) ** (stolpci % 2)
                 matrikca = Matrika(matrikca)
                 poddeterminanta = matrikca.izracun_determinante()
-                determinanta += predznak * A[0][stolpci] * poddeterminanta 
+                determinanta += predznak * A[0][stolpci] * poddeterminanta
             return determinanta
- 
 
-    def potenciranje_matrike(self,k):
-        #potenciranje
-        #pogoji
+    def potenciranje_matrike(self, k):
+        # potenciranje
+        # pogoji
         if self.vrstice != self.stolpci:
             raise Exception("POZOR! Matrika ni kvadratna!")
         else:
             if k == 0:
-                return self.mnozi_k_poteciraj_l(1,0)
+                return self.mnozi_k_poteciraj_l(1, 0)
             elif k == 1:
                 return self.matrika
             elif k == 2:
@@ -233,14 +236,15 @@ class Matrika:
                     for i in range(n):
                         for j in range(m):
                             for p in range(r):
-                                matrikca[i][j] += nova_matrika[i][p]*self.matrika[p][j]
+                                matrikca[i][j] += (
+                                    nova_matrika[i][p] * self.matrika[p][j]
+                                )
                     l -= 1
                     nova_matrika = matrikca
                 return Matrika(nova_matrika)
 
-
     def obrnljivost_matrike(self):
-        #pogoji
+        # pogoji
         if self.vrstice != self.stolpci:
             raise Exception("POZOR! Matrika ni kvadratna!")
         else:
