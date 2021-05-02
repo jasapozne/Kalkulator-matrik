@@ -9,8 +9,6 @@ class Matrika:
         
     
     def __str__(self):
-        #naj funkcija uredi matriko, tako da se vsaka vrstica začne v svoji vrstici
-        # *Kasneje (mogoče) dodaj še vejice med posamezne elemente za še lepši izpis
         matrikca = ""
         for vrstica in self.matrika:
             matrikca += str(vrstica) + '\n'
@@ -137,10 +135,12 @@ class Matrika:
         else:
             return Matrika(self.matrika.__mul__(other.matrika))
 
-    def norma(self):
+    def dolzina_vektorjev(self):
+        #pomožna funkcija, sešteje kvadrate elementov vektorja pa stolpcih
         sez=[0 for i in range(self.stolpci)]
         n = self.vrstice
         m = self.stolpci
+        sez = self.nicelni_seznam()
         for i in range(n):
             for j in range(m):
                 for k in range(len(sez)):
@@ -148,13 +148,21 @@ class Matrika:
                         sez[k] += (self.matrika[i][j]) ** 2
                     else:
                         pass
-
+        return sez
+    
+    def dolzine_sestete(self):
+        #pomožna funkcija, koreni dolžine
+        sez = self.dolzina_vektorjev()
         for h in range(len(sez)):
             sez[h]=sez[h] ** (1/2)
+        return sez
 
-        ponavljaj = self.vrstice
+    def norma(self):
+        sez = self.dolzine_sestete()
+        n = self.vrstice
+        m = self.stolpci
         sez_kot_matrika = [sez]*self.vrstice
-        matrikca = [[0 for i in range(self.stolpci)] for j in range(self.vrstice)]
+        matrikca = self.matrika_s_samimi_niclami()
         for i in range(n):
             for j in range(m):
                 matrikca[i][j] += self.matrika[i][j] * 1/sez_kot_matrika[i][j]
@@ -175,9 +183,9 @@ class Matrika:
         else:
             A = self.matrika
             determinanta = 0
-            indeksi = list(range(self.matrika.vrstice))
+            indeksi = list(range(self.vrstice))
             for stolpci in indeksi:
-                matrikca = self.matrika 
+                matrikca = A
                 matrikca = matrikca[1:]
                 visina = len(matrikca)
                 for i in range(visina): 
@@ -185,9 +193,9 @@ class Matrika:
                 predznak = (-1) ** (stolpci % 2)
                 matrikca = Matrika(matrikca)
                 poddeterminanta = matrikca.izracun_determinante()
-                determinanta += predznak *matrikca[0][stolpci] * poddeterminanta 
+                determinanta += predznak * A[0][stolpci] * poddeterminanta 
             return determinanta
-    
+ 
 
     def potenciranje_matrike(self,k):
         #potenciranje
@@ -196,7 +204,7 @@ class Matrika:
             raise Exception("POZOR! Matrika ni kvadratna!")
         else:
             if k == 0:
-                return mnozi_k_poteciraj_l(self.matrika,1,0)
+                return self.mnozi_k_poteciraj_l(1,0)
             elif k == 1:
                 return self.matrika
             elif k == 2:
@@ -204,27 +212,25 @@ class Matrika:
             elif float(k) < 0:
                 raise Exception("POZOR! K mora biti večji od 0!")
             else:
-                return Matrika(((self.matrika).__mul__(self.matrika)).__add__(potenciranje_matrike(self.matrika,k-2)))
+                l = float(k) - 1
+                nova_matrika = self.matrika
+                while l > 0:
+                    matrikca = self.matrika_s_samimi_niclami()
+                    n = self.vrstice
+                    m = self.stolpci
+                    r = self.vrstice
+                    for i in range(n):
+                        for j in range(m):
+                            for p in range(r):
+                                matrikca[i][j] += nova_matrika[i][p]*self.matrika[p][j]
+                    l -= 1
+                    nova_matrika = matrikca
+                return Matrika(nova_matrika)
 
-    @staticmethod
-    def identiteta(n):
-        matrikca = []
-        for i in range(n):
-            vrstica = []
-            for j in range(n):
-                if i == j:
-                    vrstica.append(1)
-                else:
-                    vrstica.append(0)
-            matrikca.append(vrstica)
-        return matrikca
 
     def obrnljivost_matrike(self):
         #pogoji
         if self.vrstice != self.stolpci:
             raise Exception("POZOR! Matrika ni kvadratna!")
         else:
-            if self.matrika.__mul__(inverz_matrike(self.matrika)) == (inverz_matrike(self.matrika)).__mul__(self.matrika) and  self.matrika.__mul__(inverz_matrike(self.matrika)) == identiteta(self.vrstice):
-                return True
-            else:
-                return False
+            return self.izracun_determinante() != 0
