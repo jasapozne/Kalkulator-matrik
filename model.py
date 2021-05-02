@@ -105,19 +105,18 @@ class Matrika:
     
     def __mul__(self,other):
         #funkcija, za množenje matrike 
-            if self.stolpci != other.vrstice:
-                raise Exception("POZOR! Dimenzije matrik se ne ujemajo!")
-            else:
-                matrikca = [[0 for i in range(self.stolpci)] for j in range(other.vrstice)]
-                n = self.vrstice
-                m = other.stolpci
-                l = other.vrstice
-                #matrikca = matrika_s_samimi_niclami(self.matrika)
-                for i in range(n):
-                    for j in range(m):
-                        for k in range(l):
-                            matrikca[i][j] += self.matrika[i][k]*other.matrika[k][j]
-                return Matrika(matrikca)
+        if self.stolpci != other.vrstice:
+            raise Exception("POZOR! Dimenzije matrik se ne ujemajo!")
+        else:
+            matrikca = [[0 for i in range(self.stolpci)] for j in range(other.vrstice)]
+            n = self.vrstice
+            m = other.stolpci
+            l = other.vrstice
+            for i in range(n):
+                for j in range(m):
+                    for k in range(l):
+                        matrikca[i][j] += self.matrika[i][k]*other.matrika[k][j]
+            return Matrika(matrikca)
 
     def inverz_matrike(self):
     # funkcija, ki izračuna inverz matrike
@@ -126,18 +125,29 @@ class Matrika:
         else:
             return Matrika(np.linalg.inv(np.array(self.matrika))) 
 
-    def sistem_linearnih_enacb(self,other):
+    def __len__(self):
+        return len(self.matrika)
+    
+    def __round__(self,n):
+        return round(self.matrika,0)
+
+    def sistem_linearnih_enacb(self,vektor):
         #sistem linearnih enačb
-        if self.stolpci != other.vrstice:
+        if self.stolpci != len(vektor):
             raise Exception("POZOR! Dimenzije matrik se ne ujemajo!")
-        elif other.stolpci != 1:
+        elif len(vektor[0]) != 1:
             raise Exception("POZOR! Sistem enačb ima lahko ima eno rešitev!")
         else:
-            return Matrika(self.matrika.__mul__(other.matrika))
+            mat = self.inverz_matrike().__mul__(vektor)
+            sez = self.nicelni_seznam()
+            sez_max = []
+            for i in range(len(sez)):
+                sez_max.append(max(mat[i], key = abs)) #seznam absolutno največjih elementov po vrsticah
+                sez[i] += round(sez_max[i])
+            return sez
 
     def dolzina_vektorjev(self):
         #pomožna funkcija, sešteje kvadrate elementov vektorja pa stolpcih
-        sez=[0 for i in range(self.stolpci)]
         n = self.vrstice
         m = self.stolpci
         sez = self.nicelni_seznam()
@@ -158,6 +168,7 @@ class Matrika:
         return sez
 
     def norma(self):
+        #funkcija, ki normira vektorje v matriki
         sez = self.dolzine_sestete()
         n = self.vrstice
         m = self.stolpci
@@ -169,8 +180,8 @@ class Matrika:
         return Matrika(matrikca)                   
 
     def izracun_determinante(self):
-        # determinanta
-        #matrika mora biti
+        #funkcija, ki izračuna determinanto
+        #matrika mora biti kvadratna
         if self.vrstice != self.stolpci:
             raise Exception("POZOR! Matrika ni kvadratna!")
         #če bo 1×1
