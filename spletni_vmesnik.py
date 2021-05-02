@@ -68,8 +68,7 @@ def sistemi():
     vektor = bottle.request.forms["vektor"]
     matrikca = izpisana_matrika(matrika)
     vektor1 = izpisana_matrika(vektor)
-    mat = matrikca.inverz_matrike()
-    resitev_lin_sistema = mat.__mul__(vektor1)
+    resitev_lin_sistema=matrikca.sistem_linearnih_enacb(vektor1)
     return bottle.template("resitev.html", besedilo="Sistem", rezultat=resitev_lin_sistema)
 
 ################################################################################
