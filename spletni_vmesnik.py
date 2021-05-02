@@ -13,16 +13,6 @@ def izpisana_matrika(matrika):
         matrikca.append(vrstica)
     return Matrika(matrikca)
 
-def inverz(matrika):
-# funkcija, ki izračuna inverz matrike
-    n = len(matrika)
-    m = len(matrika[0])
-    if n != m:
-        raise Exception("POZOR! Matrika ni kvadratna!")
-    else:
-        return np.linalg.inv(np.matrika)
-
-
 
 @bottle.get("/")
 def domaca_stran():
@@ -30,7 +20,7 @@ def domaca_stran():
 
 @bottle.get("/sestevanje")
 def sestevanjem():
-    return bottle.template("operacijem.html", operacija="/sestej", operator="+", operiraj="seštej")
+    return bottle.template("operacijem.html", operacija="/sestej", operator="+", operiraj="Seštej")
 
 @bottle.post("/sestej")
 def sestejm():
@@ -44,7 +34,7 @@ def sestejm():
 
 @bottle.get("/odstevanje")
 def odstevanjem():
-    return bottle.template("operacijem.html", operacija="/odstej", operator="-", operiraj="odštej")
+    return bottle.template("operacijem.html", operacija="/odstej", operator="-", operiraj="Odštej")
 
 @bottle.post("/odstej")
 def odstej():
@@ -57,7 +47,7 @@ def odstej():
 
 @bottle.get("/mnozenje")
 def mnozenje():
-    return bottle.template("operacijem.html", operacija="/mnozi", operator="*", operiraj="zmnoži")
+    return bottle.template("operacijem.html", operacija="/mnozi", operator="*", operiraj="Zmnoži")
 
 @bottle.post("/mnozi")
 def mnozi():
@@ -70,7 +60,7 @@ def mnozi():
 
 @bottle.get("/sistem_linearnih_enacb")
 def sistem_linearnih_enacb():
-    return bottle.template("lin_sis.html", objekt="vektor", operacija="/sistemi",izracunaj="sistemi")
+    return bottle.template("lin_sis.html", objekt="vektor", operacija="/sistemi",izracunaj="Izračunaj")
 
 @bottle.post("/sistemi")
 def sistemi():
@@ -85,7 +75,7 @@ def sistemi():
 ################################################################################
 @bottle.get("/transponiranje")
 def transponiranje():
-    return bottle.template("enojnematrike.html", operacija="/transponiraj", izracunaj="transponiraj")
+    return bottle.template("enojnematrike.html", operacija="/transponiraj", izracunaj="Transponiraj")
 
 @bottle.post("/transponiraj")
 def transponiraj():
@@ -96,7 +86,7 @@ def transponiraj():
 
 @bottle.get("/inverz")
 def inverz():
-    return bottle.template("enojnematrike.html", operacija="/inverziraj", izracunaj="inverziraj")
+    return bottle.template("enojnematrike.html", operacija="/inverziraj", izracunaj="Inverziraj")
 
 @bottle.post("/inverziraj")
 def inverziraj():
@@ -107,7 +97,7 @@ def inverziraj():
 
 @bottle.get("/potenciranje")
 def potenciranje():
-    return bottle.template("potenca.html",objekt="potenca", operacija="/potenciraj", izracunaj="potenciraj")
+    return bottle.template("potenca.html",objekt="potenca", operacija="/potenciraj", izracunaj="Potenciraj")
 
 @bottle.post("/potenciraj")
 def potenciraj():
@@ -119,7 +109,7 @@ def potenciraj():
 
 @bottle.get("/normiranje")
 def normiranje():
-    return bottle.template("enojnematrike.html", operacija="/normiraj", izracunaj="normiraj")
+    return bottle.template("enojnematrike.html", operacija="/normiraj", izracunaj="Normiraj")
 
 @bottle.post("/normiraj")
 def normiraj():
@@ -130,7 +120,7 @@ def normiraj():
 
 @bottle.get("/slede")
 def sledenje():
-    return bottle.template("enojnematrike.html", operacija="/sled", izracunaj="sled")
+    return bottle.template("enojnematrike.html", operacija="/sled", izracunaj="Sled")
 
 @bottle.post("/sled")
 def sled():
@@ -141,7 +131,7 @@ def sled():
 
 @bottle.get("/determiniranje")
 def determiniranje():
-    return bottle.template("enojnematrike.html", operacija="/determinanta", izracunaj="determinanta")
+    return bottle.template("enojnematrike.html", operacija="/determinanta", izracunaj="Determiniraj")
 
 @bottle.post("/determinanta")
 def determinanta():
@@ -152,14 +142,16 @@ def determinanta():
 
 @bottle.get("/obrnljivost_matrike")
 def obrnljivost_matrike():
-    return bottle.template("enojnematrike.html", operacija="/obrni", izracunaj="obrni")
+    return bottle.template("enojnematrike.html", operacija="/obrni", izracunaj="Obrni")
 
 @bottle.post("/obrni")
 def obrni():
     matrika = bottle.request.forms["matrika"]
     matrikca = izpisana_matrika(matrika)
-    mat = matrikca.inverz_matrike()
-    obrnljivo = mat.obrnljivost_matrike()
-    return bottle.template("obrnljivost.html", besedilo="Obrnljivost:", rezultat= obrnljivo)
+    obrnljivo = matrikca.obrnljivost_matrike()
+    if obrnljivo is True:
+        return bottle.template("resitev.html",  besedilo="Operator", rezultat="Matrika je obrnljiva!")
+    else:
+        return bottle.template("resitev.html",  besedilo="Operator", rezultat="Matrika ni obrnljiva!")
 
 bottle.run(reloader=True, debug=True)
