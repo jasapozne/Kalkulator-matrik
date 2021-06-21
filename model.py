@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Matrika:
     def __init__(self, matrika):
         self.matrika = matrika
@@ -97,17 +96,17 @@ class Matrika:
             return Matrika(razlika)
 
     def matrika_s_samimi_niclami(self):
-        return Matrika([[0 for i in range(self.stolpci)] for j in range(self.vrstice)])
+        return Matrika([[0 for j in range(self.stolpci)] for i in range(self.vrstice)])
 
     def nicelni_seznam(self):
-        return [0 for i in range(self.stolpci)]
+        return [0 for j in range(self.stolpci)]
 
     def __mul__(self, other):
         # funkcija, za množenje matrike
         if self.stolpci != other.vrstice:
             raise Exception("POZOR! Dimenzije matrik se ne ujemajo!")
         else:
-            matrikca = [[0 for i in range(self.stolpci)] for j in range(other.vrstice)]
+            matrikca = [[0 for j in range(self.stolpci)] for i in range(other.vrstice)]
             n = self.vrstice
             m = other.stolpci
             l = other.vrstice
@@ -127,8 +126,8 @@ class Matrika:
     def __len__(self):
         return len(self.matrika)
 
-    def __round__(self, n):
-        return round(self.matrika, 0)
+    def __round__(self):
+        return round(self.matrika, 2)
 
     def sistem_linearnih_enacb(self, vektor):
         # sistem linearnih enačb
@@ -139,12 +138,8 @@ class Matrika:
         else:
             mat = self.inverz_matrike().__mul__(vektor)
             sez = self.nicelni_seznam()
-            sez_max = []
             for i in range(len(sez)):
-                sez_max.append(
-                    max(mat[i], key=abs)
-                )  # seznam absolutno največjih elementov po vrsticah
-                sez[i] += round(sez_max[i])
+                sez[i] += round(mat[i][0])
             return sez
 
     def dolzina_vektorjev(self):
@@ -173,11 +168,10 @@ class Matrika:
         sez = self.dolzine_sestete()
         n = self.vrstice
         m = self.stolpci
-        sez_kot_matrika = [sez] * self.vrstice
         matrikca = self.matrika_s_samimi_niclami()
-        for i in range(n):
-            for j in range(m):
-                matrikca[i][j] += self.matrika[i][j] * 1 / sez_kot_matrika[i][j]
+        for j in range(m):
+            for i in range(n):
+                matrikca[i][j] += self.matrika[i][j] * 1 / sez[j]
         return Matrika(matrikca)
 
     def izracun_determinante(self):
@@ -198,17 +192,17 @@ class Matrika:
         else:
             A = self.matrika
             determinanta = 0
-            indeksi = list(range(self.vrstice))
+            indeksi = list(range(self.vrstice)) 
             for stolpci in indeksi:
                 matrikca = A
-                matrikca = matrikca[1:]
-                visina = len(matrikca)
+                matrikca = matrikca[1:] 
+                visina = len(matrikca) 
                 for i in range(visina):
-                    matrikca[i] = matrikca[i][0:stolpci] + matrikca[i][stolpci + 1 :]
+                    matrikca[i] = matrikca[i][0:stolpci] + matrikca[i][stolpci + 1 :] 
                 predznak = (-1) ** (stolpci % 2)
                 matrikca = Matrika(matrikca)
                 poddeterminanta = matrikca.izracun_determinante()
-                determinanta += predznak * A[0][stolpci] * poddeterminanta
+                determinanta += predznak * A[0][stolpci] * poddeterminanta 
             return determinanta
 
     def potenciranje_matrike(self, k):
